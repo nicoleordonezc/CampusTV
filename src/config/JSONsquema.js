@@ -7,9 +7,8 @@ db.createCollection("usuarios", {
             required:[
                 "_id",
                 "name",
-                "password",
                 "email",
-                "rol"
+                "password"
             ],
             properties:{
                 _id:{
