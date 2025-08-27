@@ -4,6 +4,7 @@ import express from "express";
 import connect from "./src/config/db.js";
 import passport from "passport";
 import { configurePassport } from "./src/config/passport.js";
+import categoryRouter from "./src/routers/categoryRouters.js"
 import contentRouters from "./src/routers/contentRouters.js"
 import authRoutes from "./src/routers/auth.js";
 import userRoutes from "./src/routers/users.js";
@@ -19,7 +20,7 @@ configurePassport(passport);
 app.use(express.json()); //Middleware de interpretacion de JSON
 
 //Rutas
-app.use("/campustv", contentRouters)
+app.use("/campustv", contentRouters, categoryRouter)
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 
