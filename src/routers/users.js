@@ -4,6 +4,9 @@ import passport from "passport";
 
 const router = express.Router();
 
+// Ver usuario
+// http://localhost:5500/user/profile
+
 router.get(
   "/profile",
   passport.authenticate("jwt", { session: false }),

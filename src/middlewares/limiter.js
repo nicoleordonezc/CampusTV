@@ -8,7 +8,7 @@ export const limiterLogin = rateLimit({
 });
 
 export const limiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
-  max: 20,
+  windowMs: 30 * 60 * 1000,
+  max: 100,
   message: "Too many requests!! ❌"
 });

@@ -10,6 +10,8 @@ dotenv.config();
 const router = express.Router();
 
 // Registro
+//http://localhost:5500/auth/register
+
 router.post("/register", async (req, res) => {
   try {
     const db = getDB();
@@ -26,6 +28,7 @@ router.post("/register", async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      rol: "usuario"
     });
 
     res.status(201).json({ message: "Usuario registrado", userId: result.insertedId });
@@ -35,6 +38,8 @@ router.post("/register", async (req, res) => {
 });
 
 // Login
+//http://localhost:5500/auth/login
+
 router.post("/login", async (req, res) => {
   try {
     const db = getDB();
