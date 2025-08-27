@@ -9,7 +9,7 @@ const dataBase = process.env.DB_NAME;
 const client = new MongoClient(uri);
 let db
 
-export  async function connect() {
+export default async function connect() {
     try {
         await client.connect();
         console.log("MongoDB está conectado ");
