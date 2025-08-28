@@ -1,6 +1,6 @@
 import {body} from "express-validator";
 
-export const categoryDTO = [
+export const contentDTO = [
     body('title').isString().isLength({max: 20}).notEmpty().withMessage("Título inválido"),
     body('description').isString().isLength({max: 500}).notEmpty().withMessage("Descripción inválida"),
     body('year').isInt().notEmpty().withMessage("Año inválido").toInt(),

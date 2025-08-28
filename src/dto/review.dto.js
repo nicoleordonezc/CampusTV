@@ -1,7 +1,7 @@
 import {body} from "express-validator";
 import { ObjectId } from "mongodb";
 
-export const categoryDTO = [
+export const reviewDTO = [
     body('userName').isString().notEmpty().withMessage("Nombre de usuario inválido"),
     body('contentName').isString().notEmpty().withMessage("Título de contenido inválido"),
     body('title').isString().isLength({max: 20}).notEmpty().withMessage("Nombre inválido"),
