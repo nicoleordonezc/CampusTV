@@ -4,6 +4,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { getDB } from "../config/db.js";
 import dotenv from "dotenv";
+import {usersDTO} from "../dto/users.dto.js"
+import {validatorFieldsDTO} from "../middlewares/validatorDTO.js"
 
 dotenv.config();
 
@@ -12,7 +14,7 @@ const router = express.Router();
 // Registro
 //http://localhost:5500/auth/register
 
-router.post("/register", async (req, res) => {
+router.post("/register", usersDTO, validatorFieldsDTO, async (req, res) => {
   try {
     const db = getDB();
     const { name, email, password } = req.body;

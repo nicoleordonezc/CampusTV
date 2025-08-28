@@ -1,4 +1,4 @@
-export class Reviews {
+export default class Reviews {
     constructor(userName, contentName, title, review, score, likes, dislikes, date) {
 
         this.userName = userName;
