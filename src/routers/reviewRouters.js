@@ -4,7 +4,8 @@ import { getDB } from "../config/db.js";
 import newReview from "../controllers/reviewsControllers.js";
 import { reviewDTO } from "../dto/review.dto.js";
 import {validatorFieldsDTO} from "../middlewares/validatorDTO.js";
-import {userValidator} from "../middlewares/userValidator.js"
+import {userValidator} from "../middlewares/userValidator.js";
+import passport from "passport";
 
 
 const router = Router();
@@ -26,12 +27,12 @@ router.get("/getreviews/:id",  async function (req, res) {
 //Crear reseñas
 //http://localhost:5500/campustv/postreview
 
-router.post("/postreview", userValidator, reviewDTO, validatorFieldsDTO, async function (req, res) {
+router.post("/postreview",  passport.authenticate("jwt", { session: false }), reviewDTO, validatorFieldsDTO, async function (req, res) {
   try {
     const { title, review, score, contentName } = req.body;
-
-     // El nombre del usuario lo saco de req.user
-    const userName = req.user.name;
+    
+    const userName = req.user.email;
+    
     const nuevaReseña = await newReview({
       userName,
       contentName,
@@ -39,9 +40,13 @@ router.post("/postreview", userValidator, reviewDTO, validatorFieldsDTO, async f
       review,
       score,
     });
-    res.status(201).json({ message: "Reseña creada con éxito", reseña: nuevaReseña });
+    console.log(nuevaReseña);
+    
+    res.status(201).json({ message: "Reseña creada con éxito", reseña: nuevaReseña});
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Internal server error", details: error.message });
+
   }
 })
+
 export default router;

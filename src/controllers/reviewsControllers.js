@@ -4,9 +4,9 @@ import _ from "lodash";
 
 //Crear review
 
-export default async function newReview({title, review, score, date}) {
-    if (_.isEmpty(userName) || _.isEmpty(contentName) || _.isEmpty(review) || _.isEmpty(score))
-        throw new Error(chalk.red("❌ Se deben llenar todos los datos."));
+export default async function newReview({userName,contentName,title, review, score}) {
+    // if (_.isEmpty(contentName) || _.isEmpty(review) || _.isEmpty(score))
+    //     throw new Error(("❌ Se deben llenar todos los datos."));
     try {
         const reseña = new Reviews(
             userName, 
@@ -17,7 +17,8 @@ export default async function newReview({title, review, score, date}) {
             date = new Date(), 
             likes= [], 
             dislikes=[])
-
+            console.log(reseña);
+            
         await getDB().collection("reseñas").insertOne(reseña)
         return reseña;
     } catch (error) {
