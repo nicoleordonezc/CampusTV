@@ -1,7 +1,11 @@
 // imports
 import { Router } from "express";
 import { getDB } from "../config/db.js";
-import newReview from "../controllers/reviewsControllers.js"
+import newReview from "../controllers/reviewsControllers.js";
+import { reviewDTO } from "../dto/review.dto.js";
+import {validatorFieldsDTO} from "../middlewares/validatorDTO.js";
+import {userValidator} from "../middlewares/userValidator.js"
+
 
 const router = Router();
 
@@ -20,16 +24,22 @@ router.get("/getreviews/:id",  async function (req, res) {
   });
 
 //Crear reseñas
-//
+//http://localhost:5500/campustv/postreview
 
-router.post("/postreview", async function (req, res) {
+router.post("/postreview", userValidator, reviewDTO, validatorFieldsDTO, async function (req, res) {
   try {
-    const usuario = req.params.email;
-    const user = await getDB().collection("usuarios").find({email: usuario}).toArray();
-    if (!user) return res.status(204).json({ message: 'No se encontró el usuario' });
+    const { title, review, score, contentName } = req.body;
 
-
-    newReview
+     // El nombre del usuario lo saco de req.user
+    const userName = req.user.name;
+    const nuevaReseña = await newReview({
+      userName,
+      contentName,
+      title,
+      review,
+      score,
+    });
+    res.status(201).json({ message: "Reseña creada con éxito", reseña: nuevaReseña });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { ObjectId } from "mongodb";
-import { getDb } from "../config/db.js"; 
+import { getDB } from "../config/db.js"; 
 
 export const userValidator = async (req, res, next) => {
   try {
@@ -18,7 +18,7 @@ export const userValidator = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // ✅ Confirmar que el usuario existe en la BD
-    const db = getDb();
+    const db = getDB();
     const user = await db.collection("usuarios").findOne({ _id: new ObjectId(decoded.userId) });
 
     if (!user) {

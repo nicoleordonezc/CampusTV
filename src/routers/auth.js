@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { getDB } from "../config/db.js";
 import dotenv from "dotenv";
 import {usersDTO} from "../dto/users.dto.js"
-import {validatorFieldsDTO} from "../middlewares/validatorDTO.js"
+import {validatorFieldsDTO} from "../middlewares/validatorDTO.js";
 
 dotenv.config();
 
