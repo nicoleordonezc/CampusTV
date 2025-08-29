@@ -21,20 +21,49 @@ async function seed() {
           rol: "usuario"
         }
       ];
-    let category= [
-        {
-          name: "Ciencia Ficción",
-          description: "Películas y series de ciencia ficción con tecnología y viajes espaciales."
-        },
-        {
-          name: "Comedia",
-          description: "Contenido diseñado para hacer reír y entretener al público."
-        },
-        {
-          name: "Drama",
-          description: "Historias con alta carga emocional y desarrollo de personajes."
-        }
-      ];
+    let category = [
+      {
+        name: "Ciencia Ficción",
+        description: "Películas y series de ciencia ficción con tecnología y viajes espaciales."
+      },
+      {
+        name: "Comedia",
+        description: "Contenido diseñado para hacer reír y entretener al público."
+      },
+      {
+        name: "Drama",
+        description: "Historias con alta carga emocional y desarrollo de personajes."
+      },
+      {
+        name: "Acción",
+        description: "Películas llenas de escenas intensas, persecuciones y combates."
+      },
+      {
+        name: "Terror",
+        description: "Contenido diseñado para provocar miedo, tensión o suspenso."
+      },
+      {
+        name: "Documental",
+        description: "Producciones basadas en hechos reales, informativas y educativas."
+      },
+      {
+        name: "Romance",
+        description: "Historias centradas en relaciones amorosas y sentimientos."
+      },
+      {
+        name: "Animación",
+        description: "Películas y series animadas, aptas para todas las edades."
+      },
+      {
+        name: "Fantasía",
+        description: "Contenido con mundos mágicos, criaturas míticas y poderes sobrenaturales."
+      },
+      {
+        name: "Aventura",
+        description: "Historias que implican viajes, descubrimientos y desafíos."
+      }
+    ];
+    
     let content = [
         {
           title: "Interstellar",

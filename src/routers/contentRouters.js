@@ -9,7 +9,7 @@ const router = Router();
 
 router.get("/getall",  async function (req, res) {
     try {
-      const contenido = await getDB().collection("contenidos").find().toArray();
+      const contenido = await getDB().collection("contenidos").aggregate([{$project:{_id:0, approved:0}}]).toArray();
       res.status(200).json(contenido);
     } catch (error) {
       res.status(500).json({ error: "Internal server error" });
@@ -21,7 +21,7 @@ router.get("/getall",  async function (req, res) {
 
 router.get("/getallmovies",  async function (req, res) {
     try {
-      const contenido = await getDB().collection("contenidos").find({type: "pelicula"}).toArray();
+      const contenido = await getDB().collection("contenidos").aggregate([{$match: {type: "pelicula"}}, {$project:{_id:0, approved:0}}]).toArray();
       res.status(200).json(contenido);
     } catch (error) {
       res.status(500).json({ error: "Internal server error" });
@@ -33,7 +33,7 @@ router.get("/getallmovies",  async function (req, res) {
 
 router.get("/getallseries",  async function (req, res) {
     try {
-      const contenido = await getDB().collection("contenidos").find({type: "serie"}).toArray();
+      const contenido = await getDB().collection("contenidos").aggregate([{$match: {type: "serie"}}, {$project:{_id:0, approved:0}}]).toArray();
       res.status(200).json(contenido);
     } catch (error) {
       res.status(500).json({ error: "Internal server error" });
