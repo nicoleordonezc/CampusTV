@@ -53,13 +53,27 @@ export async function editReview(reviewId, userName,{ title, review, score }) {
     if (!_.isEmpty(review)) updateFields.review = review;
     if (score !== undefined && score !== null) updateFields.score = parseInt(score);
 
-    await getDB().collection("reseñas").updateOne(
-      { _id: new ObjectId(reviewId) },
-      { $set: updateFields }
-    );  
+    await getDB().collection("reseñas").updateOne({ _id: new ObjectId(reviewId) }, { $set: updateFields });  
     return updateFields
   } catch (error) {
     console.error("Error al editar la reseña:", error.message);
     throw error;
   }
+};
+
+//Eliminar review
+
+export async function deleteReview(reviewId, userName) {
+    if (_.isEmpty(userName) || _.isEmpty(reviewId)) {
+    throw new Error("Se requieren todos los datos.");
+    };
+    try {
+        const existingReview = await getDB().collection("reseñas").findOne({ _id: new ObjectId(reviewId), userName});
+    if (!existingReview) {
+      throw new Error("No existe una reseña con ese ID.")};
+    await getDB().collection("reseñas").deleteOne({ _id: new ObjectId(reviewId)})
+    } catch (error) {
+        console.error("Error al editar la reseña:", error.message);
+        throw error;
+    }
 }
