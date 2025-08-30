@@ -29,7 +29,7 @@ router.post("/postcontent", contentDTO, validatorFieldsDTO, async function (req,
 });
 
 
-//Editar una review
+//Editar una contenido
 //http://localhost:5500/admin/putcontent/
 
 router.put('/putcontent/:title', async function(req, res) {
@@ -51,7 +51,7 @@ router.put('/putcontent/:title', async function(req, res) {
     }
 });
 
-//Eliminar review
+//Eliminar contenido
 //http://localhost:5500/admin/deletecontent
 
 router.delete('/deletecontent/:title', async function(req, res){
