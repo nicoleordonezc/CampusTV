@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import express from "express";
 import connect from "./src/config/db.js";
 import passport from "passport";
+import cors from "cors";
 import { configurePassport } from "./src/config/passport.js";
 import categoryRouter from "./src/routers/categoryRouters.js";
 import reviewRouter from "./src/routers/reviewRouters.js";
@@ -21,7 +22,7 @@ app.use(passport.initialize());
 configurePassport(passport);
 
 app.use(express.json()); //Middleware de interpretacion de JSON
-
+app.use(cors());
 //Rutas
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
