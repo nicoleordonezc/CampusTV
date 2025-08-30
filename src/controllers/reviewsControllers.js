@@ -7,7 +7,7 @@ import { ObjectId } from "mongodb";
 
 export async function newReview({userName,contentName,title, review, score}) {
     if (_.isEmpty(userName) || _.isEmpty(contentName) || _.isEmpty(review) || (score === undefined || score === null))
-    throw new Error(("❌ Se deben llenar todos los datos."));
+    throw new Error(("Se deben llenar todos los datos."));
     const data = await getDB().collection("reseñas").findOne({ userName: userName, contentName: contentName });
     if (data) {
     throw new Error("Ya existe una reseña tuya para este contenido");
@@ -39,7 +39,7 @@ export async function editReview(reviewId, userName,{ title, review, score }) {
 
   // Validar que al menos uno de los campos venga para actualizar
   if (_.isEmpty(title) && _.isEmpty(review) && (score === undefined || score === null)) {
-    throw new Error("⚠️ Debes enviar al menos un campo para actualizar.");
+    throw new Error("Debes enviar al menos un campo para actualizar.");
   }
   try {
     const existingReview = await getDB().collection("reseñas").findOne({ _id: new ObjectId(reviewId), userName});
@@ -71,7 +71,7 @@ export async function deleteReview(reviewId, userName) {
       throw new Error("No existe una reseña con ese ID.")};
     await getDB().collection("reseñas").deleteOne({ _id: new ObjectId(reviewId)})
     } catch (error) {
-        console.error("Error al editar la reseña:", error.message);
+        console.error("Error al eliminar la reseña:", error.message);
         throw error;
     }
 }

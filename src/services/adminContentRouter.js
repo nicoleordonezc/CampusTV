@@ -2,12 +2,12 @@
 import { Router } from "express";
 import {contentDTO} from "../dto/content.dto.js";
 import { validatorFieldsDTO } from "../middlewares/validatorDTO.js";
-import {newContent} from "../controllers/contentControllers.js"
+import {newContent, editContent, deleteContent} from "../controllers/contentControllers.js"
 
 const router = Router();
 
 //Crear contenido
-//http://localhost:5500/campustv/postcontent
+//http://localhost:5500/admin/postcontent
 
 router.post("/postcontent", contentDTO, validatorFieldsDTO, async function (req, res) {
   try {
@@ -29,4 +29,39 @@ router.post("/postcontent", contentDTO, validatorFieldsDTO, async function (req,
 });
 
 
+//Editar una review
+//http://localhost:5500/admin/putcontent/
+
+router.put('/putcontent/:title', async function(req, res) {
+    try {
+
+        const contentTitle = req.params.title;  
+        const {title, description, year, category, approved, type} = req.body;
+
+        const updateContent = await editContent(contentTitle, { title, description, year, category, approved, type });
+
+        if (!updateContent) {
+            return res.status(404).json({ error: "No se encontró el contenido" });
+        }
+
+        res.status(200).json({ message: "Contenido actualizado correctamente", content: updateContent });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error interno del servidor"+ error });
+    }
+});
+
+//Eliminar review
+//http://localhost:5500/admin/deletecontent
+
+router.delete('/deletecontent/:title', async function(req, res){
+    try {
+        const contentTitle= req.params.title;          
+        await deleteContent(contentTitle);
+        res.status(204).json({ message: "Reseña eliminada", deleted: true })
+    } catch (error) {
+        res.status(404).json({error: "Error interno del servidor"+ error})
+    }
+})
+  
 export default router;
