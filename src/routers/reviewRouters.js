@@ -4,8 +4,6 @@ import { getDB } from "../config/db.js";
 import newReview from "../controllers/reviewsControllers.js";
 import { reviewDTO } from "../dto/review.dto.js";
 import {validatorFieldsDTO} from "../middlewares/validatorDTO.js";
-import {userValidator} from "../middlewares/userValidator.js";
-import passport from "passport";
 
 
 const router = Router();
@@ -13,7 +11,7 @@ const router = Router();
 //Obetener reseñas de un contenido especifico
 //http://localhost:5500/campustv/getreviews/
 
-router.get("/getreviews/:id",  async function (req, res) {
+router.get("/getreviews/:id", async function (req, res) {
     try {
       const contenido = req.params.id;
       const review = await getDB().collection("reseñas").find({contentName: contenido}).toArray();
@@ -27,7 +25,7 @@ router.get("/getreviews/:id",  async function (req, res) {
 //Crear reseñas
 //http://localhost:5500/campustv/postreview
 
-router.post("/postreview",  passport.authenticate("jwt", { session: false }), reviewDTO, validatorFieldsDTO, async function (req, res) {
+router.post("/postreview", reviewDTO, validatorFieldsDTO, async function (req, res) {
   try {
     const { title, review, score, contentName } = req.body;
     

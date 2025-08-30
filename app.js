@@ -10,6 +10,7 @@ import userRouter from "./src/routers/userRouter.js";
 import contentRouters from "./src/routers/contentRouters.js";
 import authRoutes from "./src/routers/auth.js";
 import userRoutes from "./src/routers/users.js";
+import { validateUser, ensureUser } from "./src/middlewares/userValidator.js";
 
 //configs
 dotenv.config();
@@ -22,7 +23,8 @@ configurePassport(passport);
 app.use(express.json()); //Middleware de interpretacion de JSON
 
 //Rutas
-app.use("/campustv", contentRouters, categoryRouter, reviewRouter, userRouter)
+app.use(validateUser, ensureUser);
+app.use("/campustv", contentRouters, reviewRouter, userRouter, categoryRouter)
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 

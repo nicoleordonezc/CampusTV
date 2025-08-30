@@ -3,15 +3,16 @@ import { Router } from "express";
 import { getDB } from "../config/db.js";
 import bcrypt from "bcrypt";
 
+
 const router = Router();
 
 //Obetener reseñas de un contenido especifico
 //http://localhost:5500/campustv/userprofile
 
-router.get("/userprofile/:id",  async function (req, res) {
+router.get("/userprofile/:email",  async function (req, res) {
     try {
-      const usuario = req.params.id;
-      const user = await getDB().collection("usuarios").aggregate([{$match:{name: usuario}}, {$project:{_id:0, name:1, email:1}}]).toArray();
+      const usuario = req.params.email;
+      const user = await getDB().collection("usuarios").aggregate([{$match:{email: usuario}}, {$project:{_id:0, name:1, email:1}}]).toArray();
       if (!user) return res.status(204).json({ message: 'No se encontró el usuario' });
       res.status(200).json(user);
     } catch (error) {
@@ -22,9 +23,9 @@ router.get("/userprofile/:id",  async function (req, res) {
 //Obtener reseñas por usuario
 //http://localhost:5500/campustv/userreviews
 
-router.get("/userreviews/:id",  async function (req, res) {
+router.get("/userreviews/:email",  async function (req, res) {
   try {
-    const usuario = req.params.id;
+    const usuario = req.params.email;
     const review = await getDB().collection("reseñas").find({userName: usuario}).toArray();
     if (!review) return res.status(204).json({ message: 'No se encontraron reseñas' });
     res.status(200).json(review);

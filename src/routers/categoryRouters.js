@@ -5,7 +5,7 @@ import { getDB } from "../config/db.js";
 const router = Router();
 
 //Obetener todo el contenido de ciencia ficcion
-//http://localhost:5500/campustv/getcienciaficcion
+//http://localhost:5500/campustv/category/getcienciaficcion
 
 router.get("/getcienciaficcion",  async function (req, res) {
     try {

@@ -9,6 +9,11 @@ export default async function newReview({userName,contentName,title, review, sco
     
     if (_.isEmpty(userName) || _.isEmpty(contentName) || _.isEmpty(review) || (score === undefined || score === null))
     throw new Error(("❌ Se deben llenar todos los datos."));
+    const data = await getDB().collection("reseñas").findOne({ userName: userName, contentName: contentName });
+    if (data) {
+    throw new Error("Ya existe una reseña tuya para este contenido");
+    }
+
     try {
         const reseña = new Reviews(
             userName, 
@@ -19,12 +24,12 @@ export default async function newReview({userName,contentName,title, review, sco
             [], 
             [],
             new Date()) 
-            console.log(JSON.stringify(reseña, null, 2));
-console.log(typeof reseña.score, reseña.score);
-
         await getDB().collection("reseñas").insertOne(reseña)
         return reseña
     } catch (error) {
         console.log("Hubo un error al registrar la review"+ error);
     }
-}
+};
+
+//Ediar review
+
