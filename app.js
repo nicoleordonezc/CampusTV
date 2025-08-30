@@ -12,6 +12,8 @@ import contentRouters from "./src/routers/contentRouters.js";
 import authRoutes from "./src/routers/auth.js";
 import userRoutes from "./src/routers/users.js";
 import { validateUser, ensureUser } from "./src/middlewares/userValidator.js";
+import adminContent from "./src/services/adminContentRouter.js";
+import { ensureAdmin } from "./src/middlewares/adminValidator.js";
 
 //configs
 dotenv.config();
@@ -26,6 +28,7 @@ app.use(cors());
 //Rutas
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
+app.use("/admin", validateUser, ensureAdmin, adminContent);
 app.use(validateUser, ensureUser);
 app.use("/campustv", contentRouters, reviewRouter, userRouter, categoryRouter)
 

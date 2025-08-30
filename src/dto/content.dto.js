@@ -6,5 +6,5 @@ export const contentDTO = [
     body('year').isInt().notEmpty().withMessage("Año inválido").toInt(),
     body('category').isString().isLength({max: 50}).notEmpty().withMessage("Descripción inválida"),
     body('approved').isBoolean().notEmpty().withMessage("Aprobación inválido").toBoolean(),
-    body('type').isIn(["usuario", "administrador"]).notEmpty().withMessage("Tipo inválido")
+    body('type').isIn(["pelicula", "serie"]).notEmpty().withMessage("Tipo inválido")
 ]

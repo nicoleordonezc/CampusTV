@@ -1,4 +1,4 @@
-export class Content {
+export default class Content {
     constructor(title, description, year, category, approved, type) {
 
         this.title = title;
