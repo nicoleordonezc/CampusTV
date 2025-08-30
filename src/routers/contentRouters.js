@@ -39,4 +39,19 @@ router.get("/getallseries",  async function (req, res) {
       res.status(500).json({ error: "Internal server error" });
     }
   });
+
+//Obetener contenido por titulo
+//http://localhost:5500/campustv/contentby
+
+router.get("/contentby/:title",  async function (req, res) {
+    try {
+      const contenido = req.params.title;
+      const result = await getDB().collection("contenidos").aggregate([{$match:{title: contenido}}, {$project:{_id:0, approved:0}}]).toArray();
+      if (!result) return res.status(204).json({ message: 'No se encontró el contenido' });
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
 export default router;

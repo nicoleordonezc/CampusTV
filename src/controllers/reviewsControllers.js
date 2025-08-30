@@ -6,8 +6,6 @@ import { ObjectId } from "mongodb";
 //Crear review
 
 export async function newReview({userName,contentName,title, review, score}) {
-    console.log(userName, contentName, title, review, score );
-    
     if (_.isEmpty(userName) || _.isEmpty(contentName) || _.isEmpty(review) || (score === undefined || score === null))
     throw new Error(("❌ Se deben llenar todos los datos."));
     const data = await getDB().collection("reseñas").findOne({ userName: userName, contentName: contentName });

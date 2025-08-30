@@ -1,5 +1,4 @@
 import {body} from "express-validator";
-import { ObjectId } from "mongodb";
 
 export const reviewDTO = [
     body('contentName').isString().notEmpty().withMessage("Título de contenido inválido"),
