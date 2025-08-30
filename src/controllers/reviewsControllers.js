@@ -5,22 +5,25 @@ import _ from "lodash";
 //Crear review
 
 export default async function newReview({userName,contentName,title, review, score}) {
-    // if (_.isEmpty(contentName) || _.isEmpty(review) || _.isEmpty(score))
-    //     throw new Error(("❌ Se deben llenar todos los datos."));
+    console.log(userName, contentName, title, review, score );
+    
+    if (_.isEmpty(userName) || _.isEmpty(contentName) || _.isEmpty(review) || (score === undefined || score === null))
+    throw new Error(("❌ Se deben llenar todos los datos."));
     try {
         const reseña = new Reviews(
             userName, 
             contentName, 
             title, 
             review, 
-            score, 
-            date = new Date(), 
-            likes= [], 
-            dislikes=[])
-            console.log(reseña);
-            
+            parseInt(score), 
+            [], 
+            [],
+            new Date()) 
+            console.log(JSON.stringify(reseña, null, 2));
+console.log(typeof reseña.score, reseña.score);
+
         await getDB().collection("reseñas").insertOne(reseña)
-        return reseña;
+        return reseña
     } catch (error) {
         console.log("Hubo un error al registrar la review"+ error);
     }

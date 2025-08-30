@@ -40,8 +40,6 @@ router.post("/postreview",  passport.authenticate("jwt", { session: false }), re
       review,
       score,
     });
-    console.log(nuevaReseña);
-    
     res.status(201).json({ message: "Reseña creada con éxito", reseña: nuevaReseña});
   } catch (error) {
     res.status(500).json({ error: "Internal server error", details: error.message });

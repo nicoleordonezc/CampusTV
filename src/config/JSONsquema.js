@@ -145,6 +145,16 @@ db.createCollection("reseñas", {
                     bsonType: "objectId",
                     description: "Identificador único"
                 },
+                userName: {
+                    bsonType: "string",
+                    maxLength: 20,
+                    description: "Nombre del usuario"
+                },
+                contentName: {
+                    bsonType: "string",
+                    maxLength: 20,
+                    description: "Nombre del contenido"
+                },
                 title: {
                     bsonType: "string",
                     maxLength: 20,
@@ -156,7 +166,7 @@ db.createCollection("reseñas", {
                     description: "El correo debe tener @ y finalizar en .co, .com .es etc"
                 },
                 score:{
-                    bsonType: "int",
+                    bsonType: "number",
                     minimum: 1,
                     maximum: 10,
                     description: "Año de lanzamiento"
