@@ -23,10 +23,10 @@ configurePassport(passport);
 app.use(express.json()); //Middleware de interpretacion de JSON
 
 //Rutas
-app.use(validateUser, ensureUser);
-app.use("/campustv", contentRouters, reviewRouter, userRouter, categoryRouter)
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
+app.use(validateUser, ensureUser);
+app.use("/campustv", contentRouters, reviewRouter, userRouter, categoryRouter)
 
 connect().then(() => {
   app.listen(port, () => {

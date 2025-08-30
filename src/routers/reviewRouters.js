@@ -1,7 +1,7 @@
 // imports
 import { Router } from "express";
 import { getDB } from "../config/db.js";
-import newReview from "../controllers/reviewsControllers.js";
+import {newReview, editReview} from "../controllers/reviewsControllers.js";
 import { reviewDTO } from "../dto/review.dto.js";
 import {validatorFieldsDTO} from "../middlewares/validatorDTO.js";
 
@@ -43,6 +43,28 @@ router.post("/postreview", reviewDTO, validatorFieldsDTO, async function (req, r
     res.status(500).json({ error: "Internal server error", details: error.message });
 
   }
-})
+});
+
+//Editar una review
+router.put('/putreview/:id', async function(req, res) {
+    try {
+
+        const idReview = req.params.id;  
+        const userName = req.user.email; 
+        const { title, review, score } = req.body;
+
+        const updatedReview = await editReview(idReview, userName, { title, review, score });
+
+        if (!updatedReview) {
+            return res.status(404).json({ error: "No se encontró la reseña o no tienes permiso para editarla" });
+        }
+
+        res.status(200).json({ message: "Reseña actualizada correctamente", review: updatedReview });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error interno del servidor"+ error });
+    }
+});
+
 
 export default router;
