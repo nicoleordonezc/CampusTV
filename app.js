@@ -13,8 +13,9 @@ import authRoutes from "./src/routers/auth.js";
 import userRoutes from "./src/routers/users.js";
 import { validateUser, ensureUser } from "./src/middlewares/userValidator.js";
 import adminContent from "./src/services/adminContentRouter.js";
-import adminCategory from "./src/services/adminCategoryRouters.js"
+import adminCategory from "./src/services/adminCategoryRouters.js";
 import { ensureAdmin } from "./src/middlewares/adminValidator.js";
+import versionRouter from "./src/utils/versionRouter.js"
 
 //configs
 dotenv.config();
@@ -24,12 +25,14 @@ const app = express();
 app.use(passport.initialize());
 configurePassport(passport);
 
-app.use(express.json()); //Middleware de interpretacion de JSON
+app.use(express.json()); 
 app.use(cors());
+app.use("/version", versionRouter);
+
 //Rutas
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
-app.use("/admin", validateUser, ensureAdmin, adminContent, adminCategory);
+app.use("/admin", validateUser, ensureAdmin, adminContent, adminCategory, contentRouters, categoryRouter);
 app.use(validateUser, ensureUser);
 app.use("/campustv", contentRouters, reviewRouter, userRouter, categoryRouter)
 

@@ -12,14 +12,15 @@ async function seed() {
           name: "Ana Lopez",
           email: "ana.lopez@example.com",
           password: "$2b$10$hOYZQXhA9U8WcERf0cy9QO9iTtZC/TG53KZvGJ8F3Tx.gp3o9T2ZK",
-          rol: "administrador"
+          rol: "usuario"
         },
         {
           name: "Miguel Ruiz",
           email: "miguel.ruiz@example.com",
           password: "$2b$10$F3cWp0Spgci4A4X0/yJkBebn9yYq0vX9c2tR9iZXfZLrUQnUhE4.2",
           rol: "usuario"
-        }
+        },
+        
       ];
     let category = [
       {

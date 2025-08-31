@@ -25,4 +25,6 @@ export function getDB() {
         throw new Error("La base de datos no existe");
     }
     return db
-}
+};
+
+export { client };

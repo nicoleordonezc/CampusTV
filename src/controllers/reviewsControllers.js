@@ -1,4 +1,4 @@
-import { getDB } from "../config/db.js";
+import { getDB, client } from "../config/db.js";
 import Reviews from "../models/reviews.js";
 import _ from "lodash";
 import { ObjectId } from "mongodb";
@@ -6,14 +6,19 @@ import { ObjectId } from "mongodb";
 //Crear review
 
 export async function newReview({userName,contentName,title, review, score}) {
-    if (_.isEmpty(userName) || _.isEmpty(contentName) || _.isEmpty(review) || (score === undefined || score === null))
+
+  
+  if (_.isEmpty(userName) || _.isEmpty(contentName) || _.isEmpty(review) || (score === undefined || score === null))
     throw new Error(("Se deben llenar todos los datos."));
-    const data = await getDB().collection("reseñas").findOne({ userName: userName, contentName: contentName });
-    if (data) {
+  const data = await getDB().collection("reseñas").findOne({ userName: userName, contentName: contentName });
+  if (data) {
     throw new Error("Ya existe una reseña tuya para este contenido");
-    }
+  }
+  const session = client.startSession();
 
     try {
+
+      await session.withTransaction(async ()=>{
         const reseña = new Reviews(
             userName, 
             contentName, 
@@ -23,8 +28,8 @@ export async function newReview({userName,contentName,title, review, score}) {
             [], 
             [],
             new Date()) 
-        await getDB().collection("reseñas").insertOne(reseña)
-        return reseña
+        await getDB().collection("reseñas").insertOne(reseña,{ session })
+        return reseña})
     } catch (error) {
         console.log("Hubo un error al registrar la review"+ error);
     }
