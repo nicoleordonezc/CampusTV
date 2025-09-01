@@ -1,5 +1,87 @@
+# 🎬 CampusTV
 
-## 📌 Endpoints
+## 📌 Descripción del proyecto
+
+CampusTV es una aplicación **full-stack** que permite a los usuarios registrar, calificar y rankear películas y series, también permite gestionar usuarios, reseñas, categorías y rankings, diferenciando permisos de usuario y administrador.
+El sistema está dividido en un **backend con Node.js + Express** y un **frontend**.
+
+Incluye autenticación segura, validaciones robustas, manejo de roles (usuario y administrador) y un ranking ponderado de contenido en función de reseñas, calificaciones y popularidad.
+
+---
+
+## 👨‍💻 Créditos
+
+Proyecto desarrollado por:
+
+* **Nicole Ordoñez**
+* **Daniel Cubides**
+
+---
+
+## 🔗 Repositorio del frontend
+
+👉 [CampusTV Frontend](https://github.com/DanielFelipeFlorezCubides/campustv-frontend.git)
+
+---
+
+## 📄 Video y PDF 
+
+Video de exposición y PDF de documentación:  
+[📥 Ver](https://drive.google.com/drive/folders/1Pj0Pc3qK8IUr17zyrON7-2kXeXKknLQe?usp=sharing)
+
+---
+## 🛠️ Tecnologías usadas
+
+* **Backend**: Node.js, Express
+* **Base de datos**: MongoDB (driver oficial)
+* **Autenticación**: JWT con passport-jwt, jsonwebtoken y bcrypt
+* **Validaciones**: express-validator
+* **Seguridad**: dotenv, express-rate-limit
+* **Documentación**: swagger-ui-express
+* **Frontend**: HTML + CSS + JS + NEXT + REACT + TypeScript (repositorio independiente)
+
+---
+
+## ⚙️ Pasos para instalar y ejecutar
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/nicoleordonezc/CampusTV.git
+cd campustv-backend
+```
+
+### 2. Instalar dependencias
+
+```bash
+npm install
+```
+
+### 3. Configurar variables de entorno
+
+Crear un archivo `.env` en la raíz del proyecto con la siguiente estructura:
+
+```env
+PORT=5500
+MONGO_URI=mongodb://localhost:27017/
+DB_NAME=campustv
+JWT_SECRET= 3Xjn92L!pQ@w8^kVzRt$6Df&Gh*ZyTqf8D7!vR4$kP2nB%yQw9Z*Jx6C+eTg5sAQx!72DfG%8@w^KjrT6ZpLm$9Vv&yBnE
+JWT_EXPIRES_IN= "24h"
+API_VERSION=1.0.0
+```
+
+### 4. Ejecutar el proyecto
+
+```bash
+npm run dev
+```
+
+El servidor se levantará en:
+👉 `http://localhost:5500/api`
+
+---
+
+## 📡 Ejemplos de endpoints y cómo consumirlos
 
 ### 📝 Registro de Usuario
 
@@ -11,169 +93,59 @@
   * `usersDTO`: Valida la estructura del body (name, email, password).
   * `validatorFieldsDTO`: Verifica los errores de validación.
 
-#### ✅ Cuerpo de la Solicitud (JSON)
-
 ```json
 {
-  "name": "Juan Pérez",
-  "email": "juan@example.com",
-  "password": "securePassword123"
+  "name": "Ana",
+  "email": "ana@example.com",
+  "password": "123456"
 }
 ```
 
-### 🔐 Login de Usuario
+### Inicio de sesión
 
 * **URL:** `/auth/login`
 * **Método:** `POST`
 * **Descripción:** Verifica las credenciales del usuario y genera un token JWT si son correctas.
 
-#### ✅ Cuerpo de la Solicitud (JSON)
-
 ```json
 {
-  "email": "juan@example.com",
-  "password": "securePassword123"
+  "email": "ana@example.com",
+  "password": "123456"
 }
 ```
 
-## 📌 Endpoints por Categoría
-
-Cada uno de los siguientes endpoints retorna todos los contenidos almacenados con la categoría indicada.
-
-### 🚀 Ciencia Ficción
-- **Ruta:** `/campustv/getcienciaficcion`
-
-### 😂 Comedia
-- **Ruta:** `/campustv/getcomedia`
-
-### 🎭 Drama
-- **Ruta:** `/campustv/getdrama`
-
-### 💥 Acción
-- **Ruta:** `/campustv/getaccion`
-
-### 👻 Terror
-- **Ruta:** `/campustv/getterror`
-
-### 🎥 Documental
-- **Ruta:** `/campustv/getdocumental`
-
-### 💖 Romance
-- **Ruta:** `/campustv/getromance`
-
-### 🎨 Animación
-- **Ruta:** `/campustv/getanimacion`
-
-### 🧙 Fantasía
-- **Ruta:** `/campustv/getfantasia`
-
-### 🧭 Aventura
-- **Ruta:** `/campustv/getaventura`
-
-## Formato de respuesta
-
-Todas las rutas responden con un array de objetos en formato JSON:
-
-```json
-[
-  {
-    "title": "Breaking Bad",
-    "description": "Un profesor de química se convierte en fabricante de metanfetaminas.",
-    "year": 2008,
-    "type": "serie"
-	}
-]
-````
----
-
-## 📌 Endpoints disponibles de contenido
-
-### 📚 Obtener **todo** el contenido
-
-* **Ruta:** `/campustv/getall`
-* **Método:** `GET`
-* **Descripción:** Devuelve todos los contenidos almacenados en la base de datos, sin filtros.
-
-### 🎬 Obtener **todas las películas**
-
-* **Ruta:** `/campustv/getallmovies`
-* **Método:** `GET`
-* **Descripción:** Devuelve todos los contenidos cuyo tipo es `"pelicula"`.
-
-### 📺 Obtener **todas las series**
-
-* **Ruta:** `/campustv/getallseries`
-* **Método:** `GET`
-* **Descripción:** Devuelve todos los contenidos cuyo tipo es `"serie"`.
-
-## 🧱 Estructura de un documento de contenido
-
-Cada entrada en la colección `contenidos` debería seguir esta estructura básica:
+Respuesta exitosa:
 
 ```json
 {
-    "title": "Interstellar",
-    "description": "Un grupo de astronautas viaja a través de un agujero de gusano para salvar a la humanidad.",
-    "year": 2014,
-    "category": "Ciencia Ficción",
-    "type": "pelicula"
-	}
-```
-
-## 📌 Endpoints disponibles de usuario
-
-### 🔍 Obtener perfil de usuario
-
-* **Ruta:** `/campustv/userprofile/:id`
-* **Método:** `GET`
-* **Descripción:** Devuelve el nombre y correo electrónico del usuario cuyo nombre coincide con el parámetro `:id`.
-
-#### 🔧 Parámetros
-
-* `:id` → Nombre del usuario (`name` en la base de datos)
-
-### 🛠️ Actualizar perfil de usuario
-
-* **Ruta:** `/campustv/putuser/:email`
-* **Método:** `PUT`
-* **Descripción:** Permite actualizar el nombre o contraseña de un usuario a partir de su email.
-
-#### 🔧 Parámetros
-
-* `:email` → Correo electrónico del usuario
-
-#### ✅ Cuerpo de la solicitud (JSON)
-
-```json
-{
-  "name": "Nuevo Nombre",
-  "password": "nuevaContraseña123"
+  "token": "JWT_TOKEN_GENERADO"
 }
 ```
----
 
-## 🧱 Estructura esperada de un documento `usuarios`
+### Crear película (solo admin)
+
+* **Ruta:** `/admin/postcontent`
+* **Método:** `POST`
+* **Descripción:** Permite a un admin autenticado crear una nuevo contenido.
+
+#### 🛡️ Middlewares utilizados
+
+* `adminValidator`: Autentica al admin (por ejemplo, mediante JWT).
+* `contentDTO`: Valida los campos del body.
+* `validatorFieldsDTO`: Gestiona errores de validación.
 
 ```json
 {
-  "name": "Juan Pérez",
-  "email": "juan@example.com",
-  "password": "$2b$12$abcHasheado",
-  "rol": "usuario"
+  "title": "Friends",
+  "description": "Seis amigos viven divertidas situaciones en Nueva York.",
+  "year": 1994,
+  "category": "Comedia",
+  "approved": true,
+  "type": "serie"
 }
 ```
-## 📌 Endpoints de Reseñas
-### 🔍 Obtener reseñas por contenido
 
-* **Ruta:** `/campustv/getreviews/:id`
-* **Método:** `GET`
-* **Descripción:** Devuelve todas las reseñas asociadas a un contenido específico.
-
-#### 🔧 Parámetros
-
-* `:id` → Nombre del contenido (`contentName`)
-
-### ✍️ Crear una reseña
+### Crear reseña
 
 * **Ruta:** `/campustv/postreview`
 * **Método:** `POST`
@@ -185,16 +157,49 @@ Cada entrada en la colección `contenidos` debería seguir esta estructura bási
 * `reviewDTO`: Valida los campos del body.
 * `validatorFieldsDTO`: Gestiona errores de validación.
 
-#### ✅ Cuerpo de la solicitud (JSON)
-
 ```json
 {
-  "title": "Una obra maestra",
-  "review": "Excelente guión, actuación y dirección",
-  "score": 5,
-  "contentName": "Interstellar"
+  "contentName": "Breaking Bad",
+  "title": "Obra maestra",
+  "review": "El desarrollo de personajes es insuperable.",
+  "score": 10
 }
 ```
 
-> El nombre del usuario (`userName`) se obtiene automáticamente desde el token mediante `req.user`.
+---
 
+## 📂 Estructura del proyecto
+
+```
+campustv-backend/
+│── /config        # Configuración de variables y conexión DB
+│── /controllers   # Controladores de la lógica de negocio
+│── /middlewares   # Middlewares (auth, validaciones, rate-limit)
+│── /dto           # Patrón de diseño para los datos
+│── /models        # Modelos de datos (clases y esquemas)
+│── /routes        # Rutas del API
+│── /services      # Servicios auxiliares 
+│── /utils         # Utilidades y helpers
+│── app.js         # Configuración principal de Express
+```
+
+---
+
+## 📏 Principios aplicados
+
+* **Arquitectura modular y escalable** (separación clara en capas).
+* **Validaciones robustas** con `express-validator`.
+* **Seguridad**: JWT, bcrypt, rate-limit y variables de entorno.
+* **Principio KISS y DRY** para mantener el código claro y reutilizable.
+* **Versionamiento semántico (semver)** en la API.
+* **Documentación integrada** con Swagger.
+* **Transacciones en MongoDB** para operaciones críticas.
+
+---
+
+## ⚡ Consideraciones técnicas
+
+* El sistema diferencia permisos entre **usuario y administrador**.
+* Los administradores pueden **gestionar categorías y aprobar películas**.
+* El ranking ponderado considera **calificaciones, likes/dislikes y fecha de reseña**.
+* El frontend y backend están en **repositorios separados** para mayor independencia.

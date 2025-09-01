@@ -77,8 +77,8 @@ router.get("/ranking", async function (req, res) {
       {
         $lookup: {
           from: "reseñas",
-          localField: "title",   // campo en "contenidos"
-          foreignField: "contentName", // campo en "reseñas"
+          localField: "title",  
+          foreignField: "contentName", 
           as: "reviews"
         }
       },
@@ -129,7 +129,7 @@ router.get("/ranking", async function (req, res) {
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Internal server error"+ error });
   }
 });
 
