@@ -1,7 +1,7 @@
 // imports
 import { Router } from "express";
 import { getDB } from "../config/db.js";
-import {newReview, editReview, deleteReview} from "../controllers/reviewsControllers.js";
+import {newReview, editReview, deleteReview, likeDislike} from "../controllers/reviewsControllers.js";
 import { reviewDTO } from "../dto/review.dto.js";
 import {validatorFieldsDTO} from "../middlewares/validatorDTO.js";
 
@@ -82,6 +82,26 @@ router.delete('/deletereview/:id', async function(req, res){
         res.status(404).json({error: "Error interno del servidor"+ error})
     }
 })
+
+// Dar like o dislike
+
+router.post("/reviewaction/:id", async (req, res) => {
   
+  try {
+    const reviewId = req.params.id;
+    const userName = req.user._id; 
+    const { action } = req.body;
+  
+    const likesDislike = await likeDislike(reviewId, userName, action);
+    if (!["like", "dislike"].includes(action)) {
+      return res.status(400).json({ message: "Acción inválida" });
+    }
+
+    res.status(200).json({ message: `Has dado ${action} a la reseña`+ likesDislike });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error en el servidor"+ error });
+  }
+});
 
 export default router;

@@ -79,4 +79,45 @@ export async function deleteReview(reviewId, userName) {
         console.error("Error al eliminar la reseña:", error.message);
         throw error;
     }
+};
+
+//Dar like o dislike
+
+export async function likeDislike(reviewId, userName, action) {
+  if (_.isEmpty(userName) || _.isEmpty(reviewId) || _.isEmpty(action)) {
+    throw new Error("Se requieren todos los datos.");
+  };
+  const session = client.startSession(); 
+
+  try {
+    let result;
+    await session.withTransaction(async () => {
+      const review = await getDB().collection("reseñas").findOne({ _id: new ObjectId(reviewId) }, { session });
+
+      if (!review) throw new Error("Reseña no encontrada");
+      if (review.userName.toString() === userName.toString()) {
+        throw new Error("No puedes dar like/dislike a tu propia reseña");
+      }
+
+      const update = {};
+      if (action === "like") {
+        update.$addToSet = { likes: new ObjectId(userName) };
+        update.$pull = { dislikes: new ObjectId(userName) }; // si tenía dislike, lo quita
+      } else if (action === "dislike") {
+        update.$addToSet = { dislikes: new ObjectId(userName) };
+        update.$pull = { likes: new ObjectId(userName) }; // si tenía like, lo quita
+      }
+
+      result = await getDB().collection("reseñas").updateOne(
+        { _id: new ObjectId(reviewId) },
+        update,
+        { session }
+      );
+    });
+    return result
+  } catch (error) {
+    console.error("Error:", error.message);
+    throw error;
+  } 
 }
+
