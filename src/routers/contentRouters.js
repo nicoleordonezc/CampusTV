@@ -68,6 +68,70 @@ router.get("/getreviews/:id", async function (req, res) {
     }
   });
 
+//Obtener contenido por ranking
+//http://localhost:5500/campustv/ranking
+
+router.get("/ranking", async function (req, res) {
+  try {
+    const pipeline = [
+      {
+        $lookup: {
+          from: "reseñas",
+          localField: "title",   // campo en "contenidos"
+          foreignField: "contentName", // campo en "reseñas"
+          as: "reviews"
+        }
+      },
+      {
+        $addFields: {
+          avgScore: { $avg: "$reviews.score" },
+          likesCount: { $sum: { $map: { input: "$reviews", as: "r", in: { $size: "$$r.likes" } } } },
+          dislikesCount: { $sum: { $map: { input: "$reviews", as: "r", in: { $size: "$$r.dislikes" } } } },
+          lastReviewDate: { $max: "$reviews.date" }
+        }
+      },
+      {
+        $addFields: {
+          popularity: {
+            $add: [
+              { $multiply: ["$avgScore", 2] }, // ponderamos score
+              "$likesCount",
+              { $multiply: ["$dislikesCount", -0.5] }, // penalizamos dislikes
+              {
+                $cond: [
+                  { $gte: ["$lastReviewDate", new Date(Date.now() - 1000*60*60*24*30)] }, // último mes
+                  5,
+                  0
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        $sort: { popularity: -1, avgScore: -1, lastReviewDate: -1 }
+      },
+      {
+        $project: {
+          _id: 0,
+          approved: 0,
+          reviews: 0,
+          avgScore: 0, 
+          lastReviewDate: 0,
+          likesCount:0,
+          dislikesCount:0
+        }
+      }
+    ];
+
+    const result = await getDB().collection("contenidos").aggregate(pipeline).toArray();
+    res.status(200).json(result);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 
 export default router;
