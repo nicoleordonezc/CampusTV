@@ -4,13 +4,17 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { getDB } from "../config/db.js";
 import dotenv from "dotenv";
+import {usersDTO} from "../dto/users.dto.js"
+import {validatorFieldsDTO} from "../middlewares/validatorDTO.js";
 
 dotenv.config();
 
 const router = express.Router();
 
 // Registro
-router.post("/register", async (req, res) => {
+//http://localhost:5500/auth/register
+
+router.post("/register", usersDTO, validatorFieldsDTO, async (req, res) => {
   try {
     const db = getDB();
     const { name, email, password } = req.body;
@@ -26,6 +30,7 @@ router.post("/register", async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      rol: "usuario"
     });
 
     res.status(201).json({ message: "Usuario registrado", userId: result.insertedId });
@@ -35,6 +40,8 @@ router.post("/register", async (req, res) => {
 });
 
 // Login
+//http://localhost:5500/auth/login
+
 router.post("/login", async (req, res) => {
   try {
     const db = getDB();
