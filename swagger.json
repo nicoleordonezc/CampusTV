@@ -3,90 +3,163 @@
   "info": {
     "title": "CampusTV API",
     "version": "1.0.0",
-    "description": "API para gestionar contenidos, reseñas, usuarios y categorías en CampusTV."
+    "description": "API para gestionar usuarios, categorías, contenido y reseñas de CampusTV"
   },
   "servers": [
     {
-      "url": "http://localhost:5500/api",
-      "description": "Servidor local de desarrollo"
+      "url": "http://localhost:5500"
     }
   ],
   "paths": {
-    "/contenidos/getall": {
-      "get": {
-        "summary": "Obtener todos los contenidos",
-        "tags": ["Contenidos"],
-        "responses": {
-          "200": {
-            "description": "Lista de contenidos",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Contenido"
-                  }
-                }
+    "/auth/register": {
+      "post": {
+        "summary": "Registro de usuario",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "required": ["name", "email", "password"]
               }
             }
           }
+        },
+        "responses": {
+          "201": { "description": "Usuario registrado exitosamente" },
+          "400": { "description": "Error en los datos de entrada" }
         }
       }
     },
-    "/reseñas": {
+    "/auth/login": {
       "post": {
-        "summary": "Crear una reseña",
+        "summary": "Login de usuario",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Login exitoso, devuelve token" },
+          "401": { "description": "Credenciales inválidas" }
+        }
+      }
+    },
+    "/campustv/category/getcienciaficcion": {
+      "get": {
+        "summary": "Obtener todo el contenido de ciencia ficción",
+        "tags": ["Contenido"],
+        "responses": {
+          "200": { "description": "Lista de contenido de ciencia ficción" }
+        }
+      }
+    },
+    "/campustv/getall": {
+      "get": {
+        "summary": "Obtener todo el contenido",
+        "tags": ["Contenido"],
+        "responses": {
+          "200": { "description": "Lista de todo el contenido disponible" }
+        }
+      }
+    },
+    "/campustv/contentby": {
+      "get": {
+        "summary": "Obtener contenido por título",
+        "tags": ["Contenido"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "Título del contenido"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Contenido encontrado" },
+          "404": { "description": "Contenido no encontrado" }
+        }
+      }
+    },
+    "/campustv/getreviews/{id}": {
+      "get": {
+        "summary": "Obtener reseñas de un contenido específico",
+        "tags": ["Reseñas"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID del contenido"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Lista de reseñas" },
+          "404": { "description": "No se encontraron reseñas" }
+        }
+      }
+    },
+    "/campustv/ranking": {
+      "get": {
+        "summary": "Obtener contenido por ranking",
+        "tags": ["Contenido"],
+        "responses": {
+          "200": { "description": "Lista de contenido ordenado por ranking" }
+        }
+      }
+    },
+    "/campustv/postreview": {
+      "post": {
+        "summary": "Crear reseña",
         "tags": ["Reseñas"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ReseñaInput"
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "review": { "type": "string" },
+                  "score": { "type": "number" }
+                },
+                "required": ["title", "review", "score"]
               }
             }
           }
         },
         "responses": {
-          "201": { "description": "Reseña creada exitosamente" },
-          "400": { "description": "Datos inválidos" }
+          "201": { "description": "Reseña creada" }
         }
       }
     },
-    "/reseñas/{id}": {
+    "/campustv/putreview/{id}": {
       "put": {
-        "summary": "Editar una reseña existente",
+        "summary": "Editar una reseña",
         "tags": ["Reseñas"],
         "parameters": [
           {
-            "name": "id",
             "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/ReseñaInput" }
-            }
-          }
-        },
-        "responses": {
-          "200": { "description": "Reseña editada exitosamente" },
-          "404": { "description": "Reseña no encontrada" }
-        }
-      }
-    },
-    "/reseñas/{id}/reaction": {
-      "post": {
-        "summary": "Dar like o dislike a una reseña",
-        "tags": ["Reseñas"],
-        "parameters": [
-          {
             "name": "id",
-            "in": "path",
             "required": true,
             "schema": { "type": "string" }
           }
@@ -98,81 +171,199 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "action": {
-                    "type": "string",
-                    "enum": ["like", "dislike"]
-                  }
-                },
-                "example": { "action": "like" }
+                  "review": { "type": "string" },
+                  "score": { "type": "number" }
+                }
               }
             }
           }
         },
         "responses": {
-          "200": { "description": "Reacción registrada" },
-          "400": { "description": "Acción inválida" }
+          "200": { "description": "Reseña actualizada" }
         }
       }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Contenido": {
-        "type": "object",
-        "properties": {
-          "_id": { "type": "string", "example": "68b3a9aaa8eea04af31bbf4d" },
-          "title": { "type": "string", "example": "Friends" },
-          "description": { "type": "string", "example": "Seis amigos viven divertidas situaciones en Nueva York." },
-          "year": { "type": "integer", "example": 1994 },
-          "category": { "type": "string", "example": "Comedia" },
-          "approved": { "type": "boolean", "example": true },
-          "type": { "type": "string", "example": "serie" }
+    },
+    "/campustv/deletereview/{id}": {
+      "delete": {
+        "summary": "Eliminar reseña",
+        "tags": ["Reseñas"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Reseña eliminada" }
         }
-      },
-      "Reseña": {
-        "type": "object",
-        "properties": {
-          "userName": { "type": "string", "example": "Miguel Ruiz" },
-          "contentName": { "type": "string", "example": "Breaking Bad" },
-          "title": { "type": "string", "example": "Obra maestra" },
-          "review": { "type": "string", "example": "El desarrollo de personajes es insuperable." },
-          "score": { "type": "integer", "example": 10 },
-          "likes": {
-            "type": "array",
-            "items": { "type": "string" }
-          },
-          "dislikes": {
-            "type": "array",
-            "items": { "type": "string" }
-          },
-          "date": { "type": "string", "format": "date-time" }
+      }
+    },
+    "/campustv/putuser": {
+      "put": {
+        "summary": "Actualizar perfil de usuario",
+        "tags": ["Usuario"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Perfil actualizado" }
         }
-      },
-      "ReseñaInput": {
-        "type": "object",
-        "properties": {
-          "contentName": { "type": "string", "example": "Breaking Bad" },
-          "title": { "type": "string", "example": "Gran serie" },
-          "review": { "type": "string", "example": "Muy entretenida y con giros inesperados." },
-          "score": { "type": "integer", "example": 9 }
+      }
+    },
+    "/admin/postcategory": {
+      "post": {
+        "summary": "Crear categoría",
+        "tags": ["Admin - Categorías"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" }
+                },
+                "required": ["name"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Categoría creada" }
         }
-      },
-      "Usuario": {
-        "type": "object",
-        "properties": {
-          "_id": { "type": "string", "example": "68b3ae5681bb898198379d3f" },
-          "name": { "type": "string", "example": "Cubides" },
-          "email": { "type": "string", "example": "cubides@gmail.com" },
-          "password": { "type": "string", "example": "hashedpassword" },
-          "rol": { "type": "string", "example": "usuario" }
+      }
+    },
+    "/admin/putcategory/{id}": {
+      "put": {
+        "summary": "Editar categoría",
+        "tags": ["Admin - Categorías"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Categoría actualizada" }
         }
-      },
-      "Categoria": {
-        "type": "object",
-        "properties": {
-          "_id": { "type": "string", "example": "68b325a4166a945baeba777f" },
-          "name": { "type": "string", "example": "Ciencia Ficción" },
-          "description": { "type": "string", "example": "Películas y series de ciencia ficción con tecnología y viajes espaciales." }
+      }
+    },
+    "/admin/deletecategory/{id}": {
+      "delete": {
+        "summary": "Eliminar categoría",
+        "tags": ["Admin - Categorías"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Categoría eliminada" }
+        }
+      }
+    },
+    "/admin/postcontent": {
+      "post": {
+        "summary": "Crear contenido",
+        "tags": ["Admin - Contenido"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "description": { "type": "string" },
+                  "categoryId": { "type": "string" }
+                },
+                "required": ["title", "description", "categoryId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Contenido creado" }
+        }
+      }
+    },
+    "/admin/putcontent/{id}": {
+      "put": {
+        "summary": "Editar contenido",
+        "tags": ["Admin - Contenido"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "description": { "type": "string" },
+                  "categoryId": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Contenido actualizado" }
+        }
+      }
+    },
+    "/admin/deletecontent/{id}": {
+      "delete": {
+        "summary": "Eliminar contenido",
+        "tags": ["Admin - Contenido"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Contenido eliminado" }
         }
       }
     }
