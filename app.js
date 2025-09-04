@@ -19,6 +19,7 @@ import versionRouter from "./src/utils/versionRouter.js";
 import swaggerUi from 'swagger-ui-express';
 import fs from "fs";
 import {limiter, limiterLogin} from "./src/middlewares/limiter.js"
+import notificaicones from "./src/routers/notificacionesRouter.js"
 
 //configs
 dotenv.config();
@@ -39,7 +40,7 @@ app.use("/auth", limiterLogin, authRoutes);
 app.use("/user", userRoutes);
 app.use("/admin", validateUser, ensureAdmin, adminContent, adminCategory, contentRouters, categoryRouter);
 app.use(validateUser, ensureUser);
-app.use("/campustv", limiter, contentRouters, reviewRouter, userRouter, categoryRouter);
+app.use("/campustv", limiter, contentRouters, reviewRouter, userRouter, categoryRouter, notificaicones);
 
 
 connect().then(() => {
